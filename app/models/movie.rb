@@ -3,7 +3,7 @@ class Movie < ActiveRecord::Base
     %w(G PG PG-13 NC-17 R)
   end
   def self.find_director(movie_id)
-    Movie.find_by_director(Movie.find(movie_id).director)
+    Movie.find_all_by_director(Movie.find(movie_id).director)
   end
 
 end
