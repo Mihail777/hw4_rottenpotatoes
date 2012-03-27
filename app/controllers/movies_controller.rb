@@ -18,11 +18,13 @@ class MoviesController < ApplicationController
     @selected_ratings = params[:ratings] || session[:ratings] || {}
 
     if params[:sort] != session[:sort]
+      flash[:warning]=flash[:warning] 
       session[:sort] = sort
       redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
 
     if params[:ratings] != session[:ratings] and @selected_ratings != {}
+      flash[:warning]=flash[:warning]
       session[:sort] = sort
       session[:ratings] = @selected_ratings
       redirect_to :sort => sort, :ratings => @selected_ratings and return
@@ -59,8 +61,14 @@ class MoviesController < ApplicationController
   end
    
   def find_director
+    movie = Movie.find(params[:id])
+    if movie.director == nil or movie.director == ""
+       flash[:warning]= "'#{movie.title}' has no director info"
+       redirect_to movies_path
+       return 
+    end
     @movies = Movie.find_director(params[:id])
-   #render find_director_url(params[:id])
+    
   end
 
 end
